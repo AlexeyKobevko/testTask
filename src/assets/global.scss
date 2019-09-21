@@ -1,5 +1,32 @@
+@import "_vars";
+
+.grid-container {
+  display: grid;
+  grid-template-columns: 20vw 80vw;
+  grid-template-rows: 1fr;
+  grid-template-areas: "aside main";
+}
+
+aside {
+  grid-area: aside;
+  display: flex;
+  justify-content: center;
+  background-color: $main;
+}
+
+.main { grid-area: main; }
+
 .content {
   min-height: calc(100vh - 20vh);
   overflow-x: hidden;
   overflow-y: scroll;
+  background-color: $main;
+}
+::-webkit-scrollbar {
+  width: 0px;  /* Remove scrollbar space */
+  background: transparent;  /* Optional: just make scrollbar invisible */
+}
+/* Optional: show position indicator in red */
+::-webkit-scrollbar-thumb {
+  background: #FF0000;
 }

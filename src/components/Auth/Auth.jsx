@@ -6,6 +6,7 @@ import { endpoints } from "../../../endpoints";
 import { Redirect } from "react-router-dom";
 
 export class Auth extends Component {
+  _isMounted = false;
   state = {
     email: '',
     password: '',
@@ -15,6 +16,14 @@ export class Auth extends Component {
     isValid: false,
     isLogin: false,
   };
+
+  componentDidMount() {
+    this._isMounted = true;
+  }
+
+  componentWillUnmounted() {
+    this._isMounted = false;
+  }
 
   validateForm = (str) => {
     const { isValid } = this.state;
@@ -69,7 +78,7 @@ export class Auth extends Component {
           });
         }
 
-        if (data.status === 'ok') {
+        if (data.status === 'ok' && this._isMounted) {
           this.setState({
             isLogin: !isLogin,
           });
@@ -95,9 +104,11 @@ export class Auth extends Component {
   };
 
   handleTextChange = ({ target: { name, value } }) => {
-    this.setState({
-      [name]: value,
-    });
+    if (this._isMounted) {
+      this.setState({
+        [name]: value,
+      });
+    }
   };
 
   render() {
