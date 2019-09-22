@@ -2,8 +2,10 @@ import './Auth.scss';
 
 import React, { Component } from 'react';
 import axios from 'axios';
-import { endpoints } from "../../../endpoints";
 import { Redirect } from "react-router-dom";
+
+import { endpoints } from "../../../endpoints";
+import { ucFirst } from "../../functions/ucFirst"
 
 export class Auth extends Component {
   _isMounted = false;
@@ -21,7 +23,7 @@ export class Auth extends Component {
     this._isMounted = true;
   }
 
-  componentWillUnmounted() {
+  componentWillUnmount() {
     this._isMounted = false;
   }
 
@@ -74,7 +76,7 @@ export class Auth extends Component {
           this.setState({
             password: '',
             error: true,
-            errorText: this.ucFirst(data.message.replace(/_/g, ' ')),
+            errorText: ucFirst(data.message.replace(/_/g, ' ')),
           });
         }
 
@@ -96,12 +98,6 @@ export class Auth extends Component {
         });
     });
 };
-
-  ucFirst = (str) => {
-    if (!str) return str;
-
-    return str[0].toUpperCase() + str.slice(1);
-  };
 
   handleTextChange = ({ target: { name, value } }) => {
     if (this._isMounted) {

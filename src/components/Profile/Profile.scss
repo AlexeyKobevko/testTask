@@ -1,0 +1,26 @@
+@import "assets/_vars.scss";
+
+.links-wrapper {
+  display: flex;
+  & li:not(:last-child) {
+    margin-right: 1em;
+  }
+  & li a img {
+    width: 1.5rem;
+  }
+}
+.profile-wrapper div:not(:last-child) {
+  margin-bottom: 1em;
+}
+.profile-langs span,
+.profile-links span {
+  display: block;
+  margin-bottom: 1em;
+}
+.profile-langs ul li {
+  list-style: circle inside;
+  color: $link;
+}
+.profile-city span:last-child {
+  color: $link;
+}

@@ -3,8 +3,8 @@ import React from "react";
 
 export const Footer = () => {
   return (
-    <header>
+    <footer>
       <div>COPYRIGHT</div>
-    </header>
+    </footer>
   );
 };

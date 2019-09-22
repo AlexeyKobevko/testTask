@@ -1,0 +1,14 @@
+@import "assets/_vars.scss";
+
+.news-list-item {
+  margin-bottom: 2em;
+  max-width: 45vw;
+  box-sizing: border-box;
+  padding: 1em;
+  border: 0.5px solid $link;
+}
+.news-header {
+  font-weight: bold;
+  color: $link;
+  margin-bottom: 1em;
+}

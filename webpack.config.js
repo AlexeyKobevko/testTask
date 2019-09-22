@@ -15,6 +15,7 @@ module.exports = {
       assets: path.resolve(__dirname, 'src', 'assets'),
       containers: path.resolve(__dirname, 'src', 'containers'),
       templates: path.resolve(__dirname, 'src', 'templates'),
+      images: path.resolve(__dirname, 'src', 'img'),
     }
   },
   module: {
@@ -35,6 +36,25 @@ module.exports = {
           'sass-loader',
         ],
       },
+      {
+        test: /\.(png|jpe?g|gif|svg)$/i,
+        use: [
+          {
+            loader: 'file-loader',
+          },
+        ],
+      },
+      // {
+      //   test: /\.(png|jpg|gif|svg)$/i,
+      //   use: [
+      //     {
+      //       loader: 'url-loader',
+      //       options: {
+      //         limit: 8192,
+      //       },
+      //     },
+      //   ],
+      // },
     ],
   },
   devServer: {
