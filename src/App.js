@@ -1,14 +1,14 @@
 import './assets/global.scss'
 
-import React, { createContext } from "react";
+import React from "react";
 import {Switch, Route } from 'react-router-dom';
 
 import { Header } from './templates/Header/Header'
 import { Footer } from "./templates/Footer";
-import { Auth } from "components/Auth";
 import { Aside } from "templates/Aside";
 import { Profile } from "components/Profile";
-import { News } from "components/News";
+import {NewsContainer} from "components/News/News";
+import {AuthContainer} from "components/Auth/Auth";
 
 
 export const App = () => (
@@ -18,10 +18,9 @@ export const App = () => (
       <Aside/>
       <div className="content">
         <Switch>
-          <Route exact path="/" component={Auth} />
-          <Route exact path="/login" component={Auth} />
+          <Route exact path="/" component={AuthContainer} />
           <Route exact path="/profile" component={Profile} />
-          <Route exact path="/news" component={News} />
+          <Route exact path="/news" component={NewsContainer} />
         </Switch>
       </div>
     </main>

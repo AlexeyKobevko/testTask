@@ -1,31 +1,21 @@
 import './Auth.scss';
 
-import React, {Component, createContext} from 'react';
-import axios from 'axios';
+import React, { Component } from 'react';
 import { Redirect } from "react-router-dom";
+import { connect } from 'react-redux';
 
-import { endpoints } from "../../../endpoints";
-import { ucFirst } from "../../functions/ucFirst"
+import { checkUser } from 'actions/user';
+import { BtnSpinner } from "components/BtnSpiner";
 
 export class Auth extends Component {
-  _isMounted = false;
+
   state = {
     email: '',
     password: '',
     error: false,
-    errorText: '',
-    isLoading: false,
+    errorText: this.props.errorText ? this.props.errorText : '',
     isValid: false,
-    isLogin: false,
   };
-
-  componentDidMount() {
-    this._isMounted = true;
-  }
-
-  componentWillUnmount() {
-    this._isMounted = false;
-  }
 
   validateForm = (str) => {
     const { isValid } = this.state;
@@ -56,61 +46,27 @@ export class Auth extends Component {
   };
 
   handleSignIn = () => {
-    const { email, password, isLoading, isLogin } = this.state;
+    const { email, password } = this.state;
+    const { checkUser, loading } = this.props;
 
     if (!this.validateForm(email)) return;
 
-    this.setState({
-      isLoading: !isLoading,
-    });
-
-    axios
-      .post(endpoints.auth, {
-        email: email,
-        password: password
-      })
-      .then(response => {
-        const { data } = response;
-
-        if (data.status === 'err') {
-          this.setState({
-            password: '',
-            error: true,
-            errorText: ucFirst(data.message.replace(/_/g, ' ')),
-          });
-        }
-
-        if (data.status === 'ok' && this._isMounted) {
-          this.setState({
-            isLogin: !isLogin,
-          });
-        }
-
-        this.setState({ isLoading: !isLoading });
-
-
-
-      })
-      .catch(err => {
-        this.setState({
-          error: true,
-          errorText: 'Сервер временно недоступен',
-        });
-    });
+    if (!loading) {
+      checkUser(email, password);
+    }
 };
 
   handleTextChange = ({ target: { name, value } }) => {
-    if (this._isMounted) {
-      this.setState({
-        [name]: value,
-      });
-    }
+    this.setState({
+      [name]: value,
+    });
   };
 
   render() {
-    const { email, password, error, errorText, isLogin } = this.state;
+    const { email, password, errorText } = this.state;
+    const { error, isLoggedIn, loading } = this.props;
 
-    if (isLogin) {
+    if (isLoggedIn) {
       return <Redirect to={'/profile'}/>
     }
 
@@ -120,12 +76,14 @@ export class Auth extends Component {
           <div className="login-form">
             <input onChange={this.handleTextChange} name="email" type="email" placeholder="email" value={email} required/>
             <input onChange={this.handleTextChange} name="password" type="password" placeholder="password" value={password} required />
-            <button className="btn login-btn" onClick={this.handleSignIn} >
+            {
+              !loading ? <button className="btn login-btn" onClick={this.handleSignIn} >
               sign in
-            </button>
+              </button> : <BtnSpinner/>
+            }
           </div>
         </div>
-        {error && <div className="error-field">
+        {(error || this.state.error) && <div className="error-field">
           {errorText}
         </div>
         }
@@ -133,3 +91,21 @@ export class Auth extends Component {
     );
   }
 }
+
+function mapStateToProps(state, props) {
+  return {
+    user: state.user.id,
+    loading: state.user.loading,
+    isLoggedIn: state.user.isLoggedIn,
+    error: state.user.error,
+    errorText: state.user.errorText,
+  }
+}
+
+function mapDispatchToProps(dispatch, props) {
+  return {
+    checkUser: (email, pass) => dispatch(checkUser(email, pass)),
+  }
+}
+
+export const AuthContainer = connect(mapStateToProps, mapDispatchToProps)(Auth);
