@@ -1,0 +1,25 @@
+@import "assets/_vars.scss";
+
+.logout-btn {
+  font-family: "Roboto", sans-serif;
+  text-transform: uppercase;
+  outline: 0;
+  background: $link;
+  width: 100%;
+  border: 0;
+  padding: 0.8em;
+  color: #FFFFFF;
+  font-size: 0.7em;
+  cursor: pointer;
+  &:disabled {
+    background-color: $main;
+    &:hover {
+      background-color: $main;
+    }
+  }
+}
+.logout-btn:hover,
+.logout-btn:active,
+.logout-btn:focus {
+  background: #4d90fe;
+}

@@ -1,6 +1,6 @@
 import { handleActions } from 'redux-actions';
 
-import { loadStart, dataRecieved, errorOccured } from "actions/user";
+import {loadStart, dataRecieved, errorOccured, logout} from "actions/user";
 import {ucFirst} from "../functions/ucFirst";
 
 const initialState = {
@@ -45,6 +45,16 @@ export const userReducer = handleActions({
       loading: false,
       error: true,
       errorText: ucFirst(data.message.replace(/_/g, ' ')),
+    }
+  },
+  [logout]: (state) => {
+    return {
+      ...state,
+      id: null,
+      isLoggedIn: false,
+      loading: false,
+      error: false,
+      errorText: '',
     }
   }
 }, initialState);

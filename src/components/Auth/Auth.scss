@@ -1,3 +1,5 @@
+@import "assets/_vars.scss";
+
 .login-page {
   width: 360px;
   padding: 8% 0 0;
@@ -18,7 +20,7 @@
   font-family: "Roboto", sans-serif;
   text-transform: uppercase;
   outline: 0;
-  background: #4d90fe;
+  background: $link;
   width: 100%;
   border: 0;
   padding: 15px;
@@ -35,7 +37,7 @@
 .login-btn:hover,
 .login-btn:active,
 .login-btn:focus {
-  background: #6EC3FF;
+  background: #4d90fe;
 }
 
 .form input {
