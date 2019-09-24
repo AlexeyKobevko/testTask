@@ -1,10 +1,10 @@
 import './Auth.scss';
 
 import React, { Component } from 'react';
-import axios from 'axios';
 import { Redirect } from "react-router-dom";
+import { connect } from 'react-redux';
 
-import { endpoints } from "../../../endpoints";
+import { load } from 'actions/user';
 import { ucFirst } from "../../functions/ucFirst"
 
 export class Auth extends Component {
@@ -12,11 +12,11 @@ export class Auth extends Component {
   state = {
     email: '',
     password: '',
-    error: false,
-    errorText: '',
-    isLoading: false,
+    // error: false,
+    // errorText: '',
+    // isLoading: false,
     isValid: false,
-    isLogin: false,
+    // isLogin: false,
   };
 
   componentDidMount() {
@@ -56,47 +56,12 @@ export class Auth extends Component {
   };
 
   handleSignIn = () => {
-    const { email, password, isLoading, isLogin } = this.state;
+    const { email, password } = this.state;
+    const { checkUser } = this.props;
 
     if (!this.validateForm(email)) return;
 
-    this.setState({
-      isLoading: !isLoading,
-    });
-
-    axios
-      .post(endpoints.auth, {
-        email: email,
-        password: password
-      })
-      .then(response => {
-        const { data } = response;
-
-        if (data.status === 'err') {
-          this.setState({
-            password: '',
-            error: true,
-            errorText: ucFirst(data.message.replace(/_/g, ' ')),
-          });
-        }
-
-        if (data.status === 'ok' && this._isMounted) {
-          this.setState({
-            isLogin: !isLogin,
-          });
-        }
-
-        this.setState({ isLoading: !isLoading });
-
-
-
-      })
-      .catch(err => {
-        this.setState({
-          error: true,
-          errorText: 'Сервер временно недоступен',
-        });
-    });
+    checkUser(email, password);
 };
 
   handleTextChange = ({ target: { name, value } }) => {
@@ -108,9 +73,10 @@ export class Auth extends Component {
   };
 
   render() {
-    const { email, password, error, errorText, isLogin } = this.state;
+    const { email, password } = this.state;
+    const { error, errorText, isLoggedIn } = this.props;
 
-    if (isLogin) {
+    if (isLoggedIn) {
       return <Redirect to={'/profile'}/>
     }
 
@@ -133,3 +99,21 @@ export class Auth extends Component {
     );
   }
 }
+
+function mapStateToProps(state, props) {
+  return {
+    user: state.user.id,
+    loading: state.user.loading,
+    isLoggedIn: state.user.isLoggedIn,
+    error: state.user.error,
+    errorText: state.user.errorText,
+  }
+}
+
+function mapDispatchToProps(dispatch, props) {
+  return {
+    checkUser: (email, password) => dispatch(load(email, password)),
+  }
+}
+
+export const AuthContainer = connect(mapStateToProps, mapDispatchToProps)(Auth);

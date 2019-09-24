@@ -1,65 +1,25 @@
 import './News.scss';
 
 import React, { Component } from 'react';
-import axios from 'axios';
 
-import {endpoints} from "../../../endpoints";
 import { Loading } from "components/Loading";
 import {ucFirst} from "../../functions/ucFirst";
+import { connect } from 'react-redux';
+import { load } from 'actions/news';
 
-export class News extends Component {
-  _isMounted = false;
-  state = {
-    isLoading: false,
-    error: false,
-    errorText: '',
-    news: [],
-  };
+class News extends Component {
 
   componentDidMount() {
-    this._isMounted = true;
-    this.getNews();
+    const { loadNews } = this.props;
+    loadNews();
   }
-  componentWillUnmount() {
-    this._isMounted = false;
-  }
-
-  getNews = () => {
-    const { isLoading } = this.state;
-    this.setState({
-      isLoading: !isLoading,
-    });
-
-    axios
-      .get(endpoints.news)
-      .then(response => {
-        const { data } = response;
-
-        if (data.status === 'ok' && this._isMounted) {
-          this.setState({
-            news: data.data,
-            isLoading: false,
-          });
-        }
-
-        if (data.status === 'err') {
-          this.setState({
-            isLoading: false,
-            error: true,
-            errorText: ucFirst(data.message.replace(/_/g, ' ')),
-          });
-        }
-        console.log(data);
-      })
-
-  };
 
   render () {
-    const { isLoading, error, errorText, news } = this.state;
+    const { news, loading, error, errorText } = this.props;
 
-    if (isLoading) return <Loading />;
+    if (loading) return <Loading />;
     if (error && errorText) {
-      return <div className="error-field">{errorText}</div>
+      return <div className="error-field">{ucFirst(errorText).replace(/_/g, ' ')}</div>
     }
 
     const newsList = news.map(
@@ -83,3 +43,18 @@ export class News extends Component {
     )
   }
 }
+
+function mapStateToProps(state, props) {
+  return {
+    news: state.news.entries,
+    loading: state.news.loading,
+  }
+}
+
+function mapDispatchToProps(dispatch, props) {
+  return {
+    loadNews: () => dispatch(load()),
+  }
+}
+
+export const NewsContainer = connect(mapStateToProps, mapDispatchToProps)(News);

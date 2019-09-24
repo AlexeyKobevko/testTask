@@ -16,6 +16,8 @@ module.exports = {
       containers: path.resolve(__dirname, 'src', 'containers'),
       templates: path.resolve(__dirname, 'src', 'templates'),
       images: path.resolve(__dirname, 'src', 'img'),
+      actions: path.resolve(__dirname, 'src', 'actions'),
+      reducers: path.resolve(__dirname, 'src', 'reducers'),
     }
   },
   module: {

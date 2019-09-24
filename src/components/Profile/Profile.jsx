@@ -31,7 +31,7 @@ export class Profile extends Component {
       isLoading: !isLoading,
     });
     //TODO брать из стора
-    const params = 2;
+    const params = 1;
     axios
       .get(endpoints.profile + params)
       .then(response => {
