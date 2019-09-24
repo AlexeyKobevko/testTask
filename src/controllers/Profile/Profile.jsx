@@ -72,7 +72,7 @@ class Profile extends Component {
     const { isLoggedIn } = this.props;
 
     if (isLoading) return <Loading />;
-    if (!isLoggedIn) return <Redirect to={'/'} />;
+    if (!isLoggedIn) return <Redirect to={'/login'} />;
     if (error && errorText) {
       return <div className="error-field">{errorText}</div>
     }

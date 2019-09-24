@@ -13,7 +13,7 @@ module.exports = {
     alias: {
       components: path.resolve(__dirname, 'src', 'components'),
       assets: path.resolve(__dirname, 'src', 'assets'),
-      containers: path.resolve(__dirname, 'src', 'containers'),
+      controllers: path.resolve(__dirname, 'src', 'controllers'),
       templates: path.resolve(__dirname, 'src', 'templates'),
       images: path.resolve(__dirname, 'src', 'img'),
       actions: path.resolve(__dirname, 'src', 'actions'),

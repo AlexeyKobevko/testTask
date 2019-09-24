@@ -5,6 +5,7 @@ export const loadStart = createAction('[User] Load start');
 export const dataRecieved = createAction('[User] Data recieved');
 export const errorOccured = createAction('[User] Error occured');
 export const logout = createAction('[User] Sign out');
+export const addError = createAction('[User] Add error');
 
 export const checkUser = (email, password) => (dispatch, getState) => {
   const state = getState();

@@ -1,4 +1,5 @@
 import { createAction } from 'redux-actions';
+import { endpoints } from "../../endpoints";
 
 export const loadStart = createAction('[News] Load start');
 export const dataRecieved = createAction('[News] Data recieved');
@@ -9,7 +10,7 @@ export const load = () => (dispatch, getState) => {
 
   dispatch(loadStart());
 
-  fetch('https://mysterious-reef-29460.herokuapp.com/api/v1/news', {
+  fetch(endpoints.news, {
     headers: {
         'Content-type': 'application/json',
     },
@@ -19,6 +20,6 @@ export const load = () => (dispatch, getState) => {
       dispatch(dataRecieved(data));
     })
     .catch(error => {
-      dispatch(errorOccured());
+      dispatch(errorOccured(error));
     });
 };

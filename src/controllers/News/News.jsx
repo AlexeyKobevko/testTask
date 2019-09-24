@@ -6,6 +6,7 @@ import { Loading } from "components/Loading";
 import {ucFirst} from "../../functions/ucFirst";
 import { connect } from 'react-redux';
 import { load } from 'actions/news';
+import { Redirect } from "react-router-dom";
 
 class News extends Component {
 
@@ -15,9 +16,10 @@ class News extends Component {
   }
 
   render () {
-    const { news, loading, error, errorText } = this.props;
+    const { news, loading, error, errorText, isLoggedIn } = this.props;
 
     if (loading) return <Loading />;
+    if (!isLoggedIn) return <Redirect to={'/login'} />;
     if (error && errorText) {
       return <div className="error-field">{ucFirst(errorText).replace(/_/g, ' ')}</div>
     }
@@ -48,6 +50,7 @@ function mapStateToProps(state, props) {
   return {
     news: state.news.entries,
     loading: state.news.loading,
+    isLoggedIn: state.user.isLoggedIn,
   }
 }
 

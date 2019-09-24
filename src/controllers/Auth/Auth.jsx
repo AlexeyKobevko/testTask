@@ -4,7 +4,7 @@ import React, { Component } from 'react';
 import { Redirect } from "react-router-dom";
 import { connect } from 'react-redux';
 
-import { checkUser } from 'actions/user';
+import {addError, checkUser} from 'actions/user';
 import { BtnSpinner } from "components/BtnSpiner";
 
 export class Auth extends Component {
@@ -13,12 +13,13 @@ export class Auth extends Component {
     email: '',
     password: '',
     error: false,
-    errorText: this.props.errorText ? this.props.errorText : '',
+    errorText: '',
     isValid: false,
   };
 
   validateForm = (str) => {
     const { isValid } = this.state;
+    const { addError } = this.props;
     const regExp = /(^\w.*@\w+\.\w)/;
 
     if (str && regExp.test(str)) {
@@ -29,18 +30,12 @@ export class Auth extends Component {
     }
 
     if (!str) {
-      this.setState({
-        error: true,
-        errorText: 'Заполните поле email',
-      });
+      addError('Заполните поле email');
       return false;
     }
 
     if (str && !regExp.test(str)) {
-      this.setState({
-        error: true,
-        errorText: 'Неверно заполненно поле email',
-      });
+      addError('Неверно заполненно поле email');
       return false;
     }
   };
@@ -63,8 +58,8 @@ export class Auth extends Component {
   };
 
   render() {
-    const { email, password, errorText } = this.state;
-    const { error, isLoggedIn, loading } = this.props;
+    const { email, password } = this.state;
+    const {isLoggedIn, loading, errorText, error } = this.props;
 
     if (isLoggedIn) {
       return <Redirect to={'/profile'}/>
@@ -74,7 +69,7 @@ export class Auth extends Component {
       <div className="login-page">
         <div className="form">
           <div className="login-form">
-            <input onChange={this.handleTextChange} name="email" type="email" placeholder="email" value={email} required/>
+            <input onChange={this.handleTextChange} autoFocus name="email" type="email" placeholder="email" value={email} required/>
             <input onChange={this.handleTextChange} name="password" type="password" placeholder="password" value={password} required />
             {
               !loading ? <button className="btn login-btn" onClick={this.handleSignIn} >
@@ -83,7 +78,7 @@ export class Auth extends Component {
             }
           </div>
         </div>
-        {(error || this.state.error) && <div className="error-field">
+        {error && <div className="error-field">
           {errorText}
         </div>
         }
@@ -92,7 +87,7 @@ export class Auth extends Component {
   }
 }
 
-function mapStateToProps(state, props) {
+function mapStateToProps(state) {
   return {
     user: state.user.id,
     loading: state.user.loading,
@@ -102,9 +97,10 @@ function mapStateToProps(state, props) {
   }
 }
 
-function mapDispatchToProps(dispatch, props) {
+function mapDispatchToProps(dispatch) {
   return {
     checkUser: (email, pass) => dispatch(checkUser(email, pass)),
+    addError: (errorText) => dispatch(addError(errorText)),
   }
 }
 

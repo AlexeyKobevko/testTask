@@ -1,9 +1,5 @@
 export const menu = [
   {
-    "path": "/",
-    "name": "Главная"
-  },
-  {
     "path": "/profile",
     "name": "Профиль"
   },

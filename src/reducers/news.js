@@ -35,11 +35,13 @@ export const newsReducer = handleActions({
         }
 
     },
-    [errorOccured]: (state) => {
+    [errorOccured]: (state, action) => {
+      const data = action.payload;
         return {
             ...state,
             loading: false,
             error: true,
+            errorText: data.message,
         };
-    }
+    },
 }, initialState);
