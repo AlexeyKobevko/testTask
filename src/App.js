@@ -8,6 +8,7 @@ import { Auth } from "components/Auth";
 import { Aside } from "templates/Aside";
 import { Profile } from "components/Profile";
 import {NewsContainer} from "components/News/News";
+import {AuthContainer} from "components/Auth/Auth";
 
 
 export class App extends Component {
@@ -21,7 +22,7 @@ export class App extends Component {
           <Aside/>
           <div className="content">
             <Switch>
-              <Route exact path="/" component={Auth} />
+              <Route exact path="/" component={AuthContainer} />
               <Route exact path="/profile" component={Profile} />
               <Route exact path="/news" component={NewsContainer} />
             </Switch>

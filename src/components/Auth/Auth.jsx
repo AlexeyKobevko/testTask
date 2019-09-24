@@ -4,27 +4,25 @@ import React, { Component } from 'react';
 import { Redirect } from "react-router-dom";
 import { connect } from 'react-redux';
 
-import { load } from 'actions/user';
-import { ucFirst } from "../../functions/ucFirst"
+import { checkUser } from 'actions/user';
+import { BtnSpinner } from "components/BtnSpiner";
 
 export class Auth extends Component {
-  _isMounted = false;
+
   state = {
     email: '',
     password: '',
-    // error: false,
-    // errorText: '',
-    // isLoading: false,
+    error: false,
+    errorText: this.props.errorText ? this.props.errorText : '',
     isValid: false,
-    // isLogin: false,
   };
 
   componentDidMount() {
-    this._isMounted = true;
+
   }
 
   componentWillUnmount() {
-    this._isMounted = false;
+
   }
 
   validateForm = (str) => {
@@ -57,24 +55,24 @@ export class Auth extends Component {
 
   handleSignIn = () => {
     const { email, password } = this.state;
-    const { checkUser } = this.props;
+    const { checkUser, loading } = this.props;
 
     if (!this.validateForm(email)) return;
 
-    checkUser(email, password);
+    if (!loading) {
+      checkUser(email, password);
+    }
 };
 
   handleTextChange = ({ target: { name, value } }) => {
-    if (this._isMounted) {
-      this.setState({
-        [name]: value,
-      });
-    }
+    this.setState({
+      [name]: value,
+    });
   };
 
   render() {
-    const { email, password } = this.state;
-    const { error, errorText, isLoggedIn } = this.props;
+    const { email, password, errorText } = this.state;
+    const { error, isLoggedIn, loading } = this.props;
 
     if (isLoggedIn) {
       return <Redirect to={'/profile'}/>
@@ -86,12 +84,14 @@ export class Auth extends Component {
           <div className="login-form">
             <input onChange={this.handleTextChange} name="email" type="email" placeholder="email" value={email} required/>
             <input onChange={this.handleTextChange} name="password" type="password" placeholder="password" value={password} required />
-            <button className="btn login-btn" onClick={this.handleSignIn} >
+            {
+              !loading ? <button className="btn login-btn" onClick={this.handleSignIn} >
               sign in
-            </button>
+              </button> : <BtnSpinner/>
+            }
           </div>
         </div>
-        {error && <div className="error-field">
+        {(error || this.state.error) && <div className="error-field">
           {errorText}
         </div>
         }
@@ -112,7 +112,7 @@ function mapStateToProps(state, props) {
 
 function mapDispatchToProps(dispatch, props) {
   return {
-    checkUser: (email, password) => dispatch(load(email, password)),
+    checkUser: (email, pass) => dispatch(checkUser(email, pass)),
   }
 }
 

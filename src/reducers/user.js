@@ -20,6 +20,7 @@ export const userReducer = handleActions({
   },
   [dataRecieved]: (state, action) => {
     const data = action.payload;
+    console.log(data);
     if (data.status === 'ok') {
       return {
         ...state,
@@ -37,11 +38,13 @@ export const userReducer = handleActions({
       }
     }
   },
-  [errorOccured]: (state) => {
+  [errorOccured]: (state, action) => {
+    const data = action.payload;
     return {
       ...state,
       loading: false,
       error: true,
+      errorText: ucFirst(data.message.replace(/_/g, ' ')),
     }
   }
 }, initialState);
