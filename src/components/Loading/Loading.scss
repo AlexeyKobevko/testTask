@@ -1,6 +1,8 @@
+@import "assets/_vars.scss";
+
 .loading-wrapper {
   display: flex;
-  justify-content: center;
+  justify-content: flex-start;
 }
 .lds-roller {
   display: inline-block;
@@ -19,7 +21,7 @@
   width: 6px;
   height: 6px;
   border-radius: 50%;
-  background: #000;
+  background: $link;
   margin: -3px 0 0 -3px;
 }
 .lds-roller div:nth-child(1) {
